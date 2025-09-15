@@ -2,7 +2,6 @@ import os
 import sys
 import pandas as pd
 from dataclasses import dataclass
-
 from src.exception import CustomException
 from src.logger import logging
 from src.components.data_transformation import DataTransformation
@@ -36,7 +35,7 @@ class DataIngestion:
             logging.info("Raw data saved successfully")
 
             # Definir pozos
-            training_wells = ['15/9-F-11 B', '15/9-F-11 A', '15/9-F-1 A']
+            training_wells = ['15/9-F-11 B', '15/9-F-11 A']
             val_well = '15/9-F-1 A'
             test_wells = ['15/9-F-1 B']
 
