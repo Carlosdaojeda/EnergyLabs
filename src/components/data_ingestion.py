@@ -27,6 +27,11 @@ class DataIngestion:
             df = pd.read_csv(r'notebook\data\volve_wells.csv')
             logging.info("Dataset read successfully")
 
+            # Imputar valores faltantes en target 'DT'
+            if df['DT'].isnull().sum() > 0:
+                df['DT'].fillna(df['DT'].median(), inplace=True)
+                logging.info("Missing values in 'DT' column imputed with median")
+
             # Crear carpeta artifacts si no existe
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
 
@@ -67,7 +72,7 @@ if __name__ == "__main__":
 
     # Data transformation
     transformer = DataTransformation()
-    train_arr, val_arr, test_arr = transformer.initiate_data_transformation(train_path, val_path, test_path)
+    train_arr, val_arr, test_arr, _ = transformer.initiate_data_transformation(train_path, val_path, test_path)
 
     # Model training
     trainer = ModelTrainer()
