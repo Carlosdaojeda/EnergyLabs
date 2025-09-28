@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 import pandas as pd
+from src.logger import logging
 import os
 from src.pipeline.predict_pipeline import PredictPipeline
 from src.exception import CustomException
@@ -16,7 +17,9 @@ app = application
 
 @app.route('/')
 def index():
+    logging.info("run index")
     return render_template('index.html')
+
 
 
 @app.route('/upload', methods=['POST'])
@@ -35,7 +38,9 @@ def upload_file():
         elif ext in [".xls", ".xlsx"]:
             df = pd.read_excel(file)
         else:
+            logging.WARNING("Formato no soportado. Usa CSV o Excel.")
             return "Formato no soportado. Usa CSV o Excel."
+        
 
         # Columnas requeridas
         model_required_cols = ['RHOB', 'GR', 'NPHI', 'PEF']
@@ -51,7 +56,9 @@ def upload_file():
 
         # Predicciones
         predict_pipeline = PredictPipeline()
+
         df['Predicted_DT'] = predict_pipeline.predict(df[model_required_cols])
+        logging.info("Prediccion exitosa")
 
         # Renombrar columna real si existe
         if 'DT' in df.columns:
@@ -99,4 +106,6 @@ def upload_file():
 
 
 if __name__ == "__main__":
+    logging.info("run aplication")
     app.run(host="0.0.0.0", port=5000, debug=True)
+

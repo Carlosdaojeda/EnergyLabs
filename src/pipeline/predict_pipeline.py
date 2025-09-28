@@ -1,11 +1,13 @@
 import sys
 import os
+from src.logger import logging 
 import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
 from sklearn.impute import SimpleImputer
 
 class PredictPipeline:
+    
     def __init__(self):
         try:
             # Cargar modelo y preprocessor (imputador)
@@ -17,9 +19,12 @@ class PredictPipeline:
 
             # Guardar las columnas que se usaron en el entrenamiento
             self.feature_columns = ['RHOB', 'GR', 'NPHI', 'PEF']  # las mismas que en DataTransformation
+            
+    
 
         except Exception as e:
             raise CustomException(e, sys)
+    logging.info("predict pipeline completed")
 
     def predict(self, features: pd.DataFrame):
         try:
@@ -38,4 +43,4 @@ class PredictPipeline:
 
         except Exception as e:
             raise CustomException(e, sys)
-
+    logging.info("predict completed")
